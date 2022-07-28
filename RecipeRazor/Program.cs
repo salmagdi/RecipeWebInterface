@@ -1,11 +1,15 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddHttpClient();
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AddPageRoute("/Home", "");
+});
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddScoped<IValidator<RecipeRazor.Models.Recipe>, RecipeRazor.Models.Recipe.RecipeValidator>();
+
 
 var app = builder.Build();
 
