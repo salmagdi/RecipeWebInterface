@@ -1,15 +1,18 @@
-using FluentValidation;
+
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddHttpClient();
+IConfiguration config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .AddEnvironmentVariables()
+    .Build();
 // Add services to the container.
-builder.Services.AddRazorPages(options =>
-{
-    options.Conventions.AddPageRoute("/Home", "");
-});
-builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-builder.Services.AddScoped<IValidator<RecipeRazor.Models.Recipe>, RecipeRazor.Models.Recipe.RecipeValidator>();
+builder.Services.AddRazorPages();
 
+builder.Services.AddHttpClient("API", httpClient =>
+{
+    var url = config.GetRequiredSection("BaseUrl").Get<string>();
+    httpClient.BaseAddress = new Uri(url);
+});
 
 var app = builder.Build();
 

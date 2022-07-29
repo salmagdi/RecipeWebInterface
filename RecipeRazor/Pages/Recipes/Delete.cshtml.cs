@@ -19,11 +19,13 @@ public class DeleteModel : PageModel
 	{
 		try
 		{
-			var httpClient = _httpClientFactory.CreateClient("RecipeAPI");
-			var response = await httpClient.GetFromJsonAsync<Recipe>($"recipes/{RecipeId}");
+			var httpClient = _httpClientFactory.CreateClient("API");
+			string baseAddress = httpClient.BaseAddress.ToString();
+			var response = await httpClient.PostAsJsonAsync($"{baseAddress}recipes",
+				 new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 			if (response == null)
 				return NotFound();
-			Recipe = response;
+			//Recipe = response;
 			return Page();
 		}
 		catch (Exception)
@@ -37,9 +39,10 @@ public class DeleteModel : PageModel
 	{
 		try
 		{
-			var httpClient = _httpClientFactory.CreateClient("RecipeAPI");
-			var response = await httpClient.DeleteAsync("recipes?id=" + RecipeId);
-			response.EnsureSuccessStatusCode();
+			var httpClient = _httpClientFactory.CreateClient("API");
+			string baseAddress = httpClient.BaseAddress.ToString();
+			var response = await httpClient.PostAsJsonAsync($"{baseAddress}recipes",
+				 new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 			ActionResult = "Successfully Deleted";
 		}
 		catch (Exception)

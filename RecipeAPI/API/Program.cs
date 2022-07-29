@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using RecipeAPI.API;
+using RecipeAPI.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +20,13 @@ if (app.Environment.IsDevelopment())
 }
 
 var recipesList = new List<Recipe>();
+var recipePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+string RecipeFile = Path.Combine(recipePath, "Recipes.json");
 var categoriesList = new List<string>();
-var jsonPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-string jsonFile = Path.Combine(jsonPath, "Recipes.json");
+var categoryPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+string CategoryFile = Path.Combine(categoryPath, "Categories.json");
 
-using (StreamReader streamReader = new StreamReader(jsonFile))
+using (StreamReader streamReader = new StreamReader(RecipeFile))
 {
 	var Data = streamReader.ReadToEnd();
 	var Json = JsonConvert.DeserializeObject<List<Recipe>>(Data);
@@ -41,7 +44,7 @@ app.MapGet("/recipes", () =>
 app.MapPost("/recipes", (Recipe recipe) =>
 {
 	recipesList.Add(recipe);
-	Save();
+	SaveRecipe();
 	return Results.Created($"/recipes/{recipe.Id}", recipe);
 });
 
@@ -50,7 +53,7 @@ app.MapDelete("/recipes", (Guid id) =>
 	if (recipesList.Find(recipe => recipe.Id == id) is Recipe recipe)
 	{
 		recipesList.Remove(recipe);
-		Save();
+		SaveRecipe();
 		return Results.Ok(recipe);
 	}
 	return Results.NotFound(); //404 not found
@@ -62,7 +65,7 @@ app.MapPut("/recipes", (Recipe editedRecipe) =>
 	{
 		recipesList.Remove(recipe);
 		recipesList.Add(editedRecipe);
-		Save();
+		SaveRecipe();
 		return Results.NoContent();
 	}
 	return Results.NotFound();
@@ -73,10 +76,10 @@ app.MapGet("/category", () =>
 	return Results.Ok(categoriesList);
 });
 
-app.MapPost("/category", (string category) =>
+app.MapPost("/category", ([FromBody] Category category) =>
 {
-	categoriesList.Add(category);
-	Save();
+	categoriesList.Add(category.CategoryName);
+	SaveCategory();
 	return Results.Created($"/recipes/{category}", category);
 });
 
@@ -91,7 +94,7 @@ app.MapDelete("/category", (string category) =>
 				r.Categories.Remove(category);
 			}
 			categoriesList.Remove(category);
-			Save();
+			SaveRecipe();
 			return Results.Ok(category);
 		}
 	}
@@ -111,15 +114,20 @@ app.MapPut("/category", (string oldCategory, string editCategory) =>
 				r.Categories.Remove(oldCategory);
 				r.Categories.Add(editCategory);
 			}
-			Save();
+			SaveRecipe();
 			return Results.NoContent();
 		}
 	}
 	return Results.NotFound();
 });
 
-void Save()
+void SaveRecipe()
 {
-	File.WriteAllText(jsonFile, JsonConvert.SerializeObject(recipesList));
+	File.WriteAllText(RecipeFile, JsonConvert.SerializeObject(recipesList));
+}
+ 
+void SaveCategory()
+{
+	File.WriteAllText(CategoryFile, JsonConvert.SerializeObject(categoriesList));
 }
 app.Run();

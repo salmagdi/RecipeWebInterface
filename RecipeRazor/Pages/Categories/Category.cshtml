@@ -1,34 +1,25 @@
 ﻿@page
 @model RecipeRazor.Pages.Categories.CategoryModel
 @{
-    ViewData["Title"] = "Categories";
+	ViewData["Title"] = "Create";
 }
-<div class="container p-3">
-    <div class="row pt-4">
-        <div class="col-6">
-            <h2 class="text-secondary"> Category List </h2>   
-        </div>
-        <div class="col-6">
 
-        </div>
+<h2 class="my-4">Create A New Category</h2>
 
-    </div>
-    <br/> <br/>
+<form method="post">
+	<div class="row my-3">
+		<label asp-for="@Model.Category" class="col-form-label col-2"></label>
 
-     <table>
-         <thead>
-             <tr>
-                 <th>
-                     Category Name
-                 </th>
-             </tr>
-         </thead>
-         <tbody>
-             
-                 <tr>
-                      
-                </tr> 
-          
-         </tbody>
-     </table>
-</div>
+		<div class="col-3">
+			<input asp-for="@Model.Category" class="form-control" />
+			<span asp-validation-for="@Model.Category" class="text-danger"></span>
+		</div>
+
+	</div>
+	<div class="btn-group float-end">
+		<input type="submit" value="Create" class="btn btn-primary" />
+		<a class="btn btn-secondary" asp-page="Index">Back to List</a>
+	</div>
+
+
+</form>

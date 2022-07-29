@@ -27,32 +27,38 @@ namespace RecipeRazor.Pages.Recipes;
 	{
 		try
 		{
-			var httpClient = _httpClientFactory.CreateClient("RecipeAPI");
-			var response = await httpClient.GetFromJsonAsync<IEnumerable<string>>("categories");
-			if (response != null)
-				Categories = response;
+			var httpClient = _httpClientFactory.CreateClient("API");
+			string baseAddress = httpClient.BaseAddress.ToString();
+			var response = await httpClient.PostAsJsonAsync($"{baseAddress}category",
+				 new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+			response.EnsureSuccessStatusCode();
+			ActionResult = "Created successfully";
 			return Page();
 		}
 		catch (Exception)
 		{
 			ActionResult = "Something went wrong, please try again";
-			return RedirectToPage("./Index");
+			return RedirectToPage("/Index");
 		}
 	}
 
 	public async Task<IActionResult> OnPostAsync()
 	{
-		var httpClient = _httpClientFactory.CreateClient("RecipeAPI");
+		var httpClient = _httpClientFactory.CreateClient("API");
 		try
 		{
-			var response = await httpClient.GetFromJsonAsync<IEnumerable<string>>("categories");
-			if (response != null)
-				Categories = response;
+			string baseAddress = httpClient.BaseAddress.ToString();
+			var response = await httpClient.PostAsJsonAsync($"{baseAddress}recipes",
+				 new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+			response.EnsureSuccessStatusCode();
+			ActionResult = "Created successfully";
+			/*if (response != null)
+				Categories = response.ToString().ToList<>();*/
 		}
 		catch (Exception)
 		{
 			ActionResult = "Something went wrong, please try again";
-			return RedirectToPage("./Index");
+			return RedirectToPage("/Index");
 		}
 
 		if (!ModelState.IsValid)
@@ -69,9 +75,11 @@ namespace RecipeRazor.Pages.Recipes;
 		
 		try
 		{
-			var response = await httpClient.PostAsJsonAsync("recipes", Recipe);
+			string baseAddress = httpClient.BaseAddress.ToString();
+			var response = await httpClient.PostAsJsonAsync($"{baseAddress}recipes",
+				 new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 			response.EnsureSuccessStatusCode();
-			ActionResult = "Successfully Created";
+			ActionResult = "Created successfully";
 		}
 		catch (Exception)
 		{
