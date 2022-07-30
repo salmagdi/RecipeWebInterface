@@ -11,7 +11,9 @@ public class CategoryModel : PageModel
 	[BindProperty]
 	[Required]
 	[Display(Name = "Category Name")]
-	public string Category { get; set; } = String.Empty;
+	public string Category { get; set; } = string.Empty;
+	[BindProperty]
+	public List<string> Categories { get; set; } = new();
 	private readonly IHttpClientFactory _httpClientFactory;
 
 	public CategoryModel(IHttpClientFactory httpClientFactory) =>
@@ -36,4 +38,5 @@ public class CategoryModel : PageModel
 		}
 		return RedirectToPage("/Index");
 	}
+
 }

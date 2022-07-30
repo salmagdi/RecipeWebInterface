@@ -16,8 +16,9 @@ public class IndexModel : PageModel
 	{
 		try
 		{
-			var httpClient = _httpClientFactory.CreateClient("RecipeAPI");
-			List<Recipe>? recipes = await httpClient.GetFromJsonAsync<List<Recipe>>("recipes");
+			var httpClient = _httpClientFactory.CreateClient("API");
+			string baseAddress = httpClient.BaseAddress.ToString();
+			List<Recipe> recipes = await httpClient.GetFromJsonAsync<List<Recipe>>($"{baseAddress}recipes");
 			if (recipes != null)
 				RecipeList = recipes;
 			return Page();

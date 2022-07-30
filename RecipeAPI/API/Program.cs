@@ -48,7 +48,7 @@ app.MapPost("/recipes", (Recipe recipe) =>
 	return Results.Created($"/recipes/{recipe.Id}", recipe);
 });
 
-app.MapDelete("/recipes", (Guid id) =>
+app.MapDelete("/recipes/{id}", (Guid id) =>
 {
 	if (recipesList.Find(recipe => recipe.Id == id) is Recipe recipe)
 	{

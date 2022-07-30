@@ -11,7 +11,7 @@ namespace RecipeRazor.Pages.Recipes;
 	public string? ActionResult { get; set; }
 	[BindProperty]
 	[Required]
-	public Recipe Recipe { get; set; } = new();
+	public Recipe NewRecipie { get; set; } = new();
 	public IEnumerable<string> Categories { get; set; } = Enumerable.Empty<string>();
 	[BindProperty]
 	public IEnumerable<string>? SelectedCategories { get; set; } = Enumerable.Empty<string>();
@@ -29,16 +29,15 @@ namespace RecipeRazor.Pages.Recipes;
 		{
 			var httpClient = _httpClientFactory.CreateClient("API");
 			string baseAddress = httpClient.BaseAddress.ToString();
-			var response = await httpClient.PostAsJsonAsync($"{baseAddress}category",
-				 new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-			response.EnsureSuccessStatusCode();
-			ActionResult = "Created successfully";
+			var response = await httpClient.GetFromJsonAsync<IEnumerable<string>>($"{baseAddress}category");
+			if (response != null)
+				Categories = response; 
 			return Page();
 		}
 		catch (Exception)
 		{
 			ActionResult = "Something went wrong, please try again";
-			return RedirectToPage("/Index");
+			return RedirectToPage("./List");
 		}
 	}
 
@@ -48,36 +47,34 @@ namespace RecipeRazor.Pages.Recipes;
 		try
 		{
 			string baseAddress = httpClient.BaseAddress.ToString();
-			var response = await httpClient.PostAsJsonAsync($"{baseAddress}recipes",
-				 new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-			response.EnsureSuccessStatusCode();
-			ActionResult = "Created successfully";
-			/*if (response != null)
-				Categories = response.ToString().ToList<>();*/
+			var response = await httpClient.GetFromJsonAsync<IEnumerable<string>>($"{baseAddress}category");
+			if (response != null)
+				SelectedCategories = response;
 		}
 		catch (Exception)
 		{
 			ActionResult = "Something went wrong, please try again";
-			return RedirectToPage("/Index");
+			return RedirectToPage("./List");
 		}
 
 		if (!ModelState.IsValid)
 			return Page();
 
-		Recipe.Id = Guid.Empty;
+		NewRecipie.Id = Guid.Empty;
 		if (SelectedCategories != null)
-			Recipe.Categories = (List<string>)SelectedCategories;
+			NewRecipie.Categories = (List<string>)SelectedCategories;
 		if (Ingredients != null)
-			Recipe.Ingredients = Ingredients.Split(Environment.NewLine).ToList();
+			NewRecipie.Ingredients = Ingredients.Split(Environment.NewLine).ToList();
 		if (Instructions != null)
-			Recipe.Instructions = Instructions.Split(Environment.NewLine).ToList();
+			NewRecipie.Instructions = Instructions.Split(Environment.NewLine).ToList();
 
 		
 		try
-		{
+		{	
 			string baseAddress = httpClient.BaseAddress.ToString();
 			var response = await httpClient.PostAsJsonAsync($"{baseAddress}recipes",
-				 new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+				  new Recipe {Id=NewRecipie.Id,Title=NewRecipie.Title, Ingredients=NewRecipie.Ingredients, Instructions=NewRecipie.Instructions, Categories=NewRecipie.Categories}
+				 ,new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 			response.EnsureSuccessStatusCode();
 			ActionResult = "Created successfully";
 		}
@@ -85,6 +82,6 @@ namespace RecipeRazor.Pages.Recipes;
 		{
 			ActionResult = "Something went wrong, please try again";
 		}
-		return RedirectToPage("./Index");
+		return RedirectToPage("./List");
 	}
 }
