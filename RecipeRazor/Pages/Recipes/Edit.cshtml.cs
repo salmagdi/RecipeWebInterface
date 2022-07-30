@@ -24,7 +24,36 @@ public class EditModel :PageModel
 	public EditModel(IHttpClientFactory httpClientFactory) =>
 			_httpClientFactory = httpClientFactory;
 
-	public async Task<IActionResult> OnGetAsync(Guid recipeId)
+	public void OnGet()
+	{
+	}
+	public async Task<IActionResult> OnPostAsync(Guid recipeId)
+	{
+		
+
+		RecipeEdited.Id = recipeId;
+		if (SelectedCategories != null)
+			RecipeEdited.Categories = (List<string>)SelectedCategories;
+		if (Ingredients != null)
+			RecipeEdited.Ingredients = Ingredients.Split(Environment.NewLine).ToList();
+		if (Instructions != null)
+			RecipeEdited.Instructions = Instructions.Split(Environment.NewLine).ToList();
+
+		try
+		{
+			var httpClient = _httpClientFactory.CreateClient("API");
+			var response = await httpClient.PutAsJsonAsync("recipes",RecipeEdited);
+			response.EnsureSuccessStatusCode();
+			ActionResult = "Created successfully";
+		}
+		catch (Exception)
+		{
+			ActionResult = "Something went wrong, Try again later";
+		}
+		return RedirectToPage("/Index");
+	}
+
+	/*public async Task<IActionResult> OnGetAsync(Guid recipeId)
 	{
 		var httpClient = _httpClientFactory.CreateClient("API");
 		string baseAddress = httpClient.BaseAddress.ToString();
@@ -75,6 +104,6 @@ public class EditModel :PageModel
 			ActionResult = "Something went wrong, please try again";
 		}
 		return RedirectToPage("/Index");
-	}
+	}*/
 
 }

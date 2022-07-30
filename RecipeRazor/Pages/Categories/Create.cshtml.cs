@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using RecipeRazor.Models;
 namespace RecipeRazor.Pages.Categories;
 
-public class CategoryModel : PageModel
+public class CreateModel : PageModel
 {
 	[TempData]
 	public string? ActionResult { get; set; }
@@ -16,7 +16,7 @@ public class CategoryModel : PageModel
 	public List<string> Categories { get; set; } = new();
 	private readonly IHttpClientFactory _httpClientFactory;
 
-	public CategoryModel(IHttpClientFactory httpClientFactory) =>
+	public CreateModel(IHttpClientFactory httpClientFactory) =>
 			_httpClientFactory = httpClientFactory;
 
 	public async Task<IActionResult> OnPostAsync()
@@ -27,7 +27,7 @@ public class CategoryModel : PageModel
 		{
 			var httpClient = _httpClientFactory.CreateClient("API");
 			string baseAddress = httpClient.BaseAddress.ToString();
-			var response = await httpClient.PostAsJsonAsync($"{baseAddress}category", 
+			var response = await httpClient.PostAsJsonAsync($"{baseAddress}category",
 				new Category { CategoryName = Category }, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 			response.EnsureSuccessStatusCode();
 			ActionResult = "Created successfully";
@@ -36,7 +36,7 @@ public class CategoryModel : PageModel
 		{
 			ActionResult = "Something went wrong, Try again later";
 		}
-		return RedirectToPage("/Index");
+		return RedirectToPage("./List");
 	}
 
 }

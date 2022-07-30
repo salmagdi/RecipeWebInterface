@@ -48,7 +48,7 @@ app.MapPost("/recipes", (Recipe recipe) =>
 	return Results.Created($"/recipes/{recipe.Id}", recipe);
 });
 
-app.MapDelete("/recipes/{id}", (Guid id) =>
+app.MapDelete("/recipes", (Guid id) =>
 {
 	if (recipesList.Find(recipe => recipe.Id == id) is Recipe recipe)
 	{
@@ -101,18 +101,18 @@ app.MapDelete("/category", (string category) =>
 	return Results.NotFound();
 });
 
-app.MapPut("/category", (string oldCategory, string editCategory) =>
+app.MapPut("/category", (string oldCategory, string editedCategory) =>
 {
 	for (int i = 0; i < categoriesList.Count; ++i)
 	{
 		if (categoriesList[i] == oldCategory)
 		{
 			categoriesList.Remove(oldCategory);
-			categoriesList.Add(editCategory);
+			categoriesList.Add(editedCategory);
 			foreach (var r in recipesList)
 			{
 				r.Categories.Remove(oldCategory);
-				r.Categories.Add(editCategory);
+				r.Categories.Add(editedCategory);
 			}
 			SaveRecipe();
 			return Results.NoContent();

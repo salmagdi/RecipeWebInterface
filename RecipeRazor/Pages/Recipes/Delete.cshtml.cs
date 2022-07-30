@@ -21,7 +21,7 @@ public class DeleteModel : PageModel
 		{
 			var httpClient = _httpClientFactory.CreateClient("API");
 			string baseAddress = httpClient.BaseAddress.ToString();
-			var response = await httpClient.GetFromJsonAsync<Recipe>($"recipes/{RecipeId}");
+			var response = await httpClient.GetFromJsonAsync<Recipe>($"{baseAddress}recipes");
 			if (response == null)
 				return NotFound();
 			Recipe = response;
@@ -30,7 +30,7 @@ public class DeleteModel : PageModel
 		catch (Exception)
 		{
 			ActionResult = "Something went wrong, please try again";
-			return RedirectToPage("/Index");
+			return RedirectToPage("./List");
 		}
 	}
 
@@ -39,6 +39,7 @@ public class DeleteModel : PageModel
 		try
 		{
 			var httpClient = _httpClientFactory.CreateClient("API");
+			string baseAddress = httpClient.BaseAddress.ToString();
 			var response = await httpClient.DeleteAsync("recipes?id=" + RecipeId);
 			response.EnsureSuccessStatusCode();
 			ActionResult = "Successfully Deleted";
@@ -47,6 +48,6 @@ public class DeleteModel : PageModel
 		{
 			ActionResult = "Something went wrong, please try again";
 		}
-		return RedirectToPage("/Index");
+		return RedirectToPage("./List");
 	}
 }
