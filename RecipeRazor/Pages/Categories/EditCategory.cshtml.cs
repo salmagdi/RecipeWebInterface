@@ -2,23 +2,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using RecipeRazor.Models;
+
 namespace RecipeRazor.Pages.Categories;
 
-public class CreateModel : PageModel
+public class EditCategoryModel : PageModel
 {
+
 	[TempData]
 	public string? ActionResult { get; set; }
+	[FromRoute(Name = "category")]
+	[Display(Name = "Old Category Name")]
+	public string OldCategory { get; set; } = string.Empty;
 	[BindProperty]
 	[Required]
-	[Display(Name = "Category Name")]
-	public string Category { get; set; } = string.Empty;
-	[BindProperty]
-	public List<string> Categories { get; set; } = new();
+	[Display(Name = "New Name")]
+	public string NewCategory { get; set; } = string.Empty;
 	private readonly IHttpClientFactory _httpClientFactory;
 
-	public CreateModel(IHttpClientFactory httpClientFactory) =>
+	public EditCategoryModel(IHttpClientFactory httpClientFactory) =>
 			_httpClientFactory = httpClientFactory;
 
+	public void OnGet()
+	{
+	}
 	public async Task<IActionResult> OnPostAsync()
 	{
 		if (!ModelState.IsValid)
@@ -26,17 +32,14 @@ public class CreateModel : PageModel
 		try
 		{
 			var httpClient = _httpClientFactory.CreateClient("API");
-			string baseAddress = httpClient.BaseAddress.ToString();
-			var response = await httpClient.PostAsJsonAsync($"{baseAddress}category",
-				new Category { CategoryName = Category }, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+			var response = await httpClient.PutAsync($"category?oldCategory={OldCategory}&editedCategory={NewCategory}", null);
 			response.EnsureSuccessStatusCode();
-			ActionResult = "Created successfully";
+			ActionResult = "Edited successfully";
 		}
 		catch (Exception)
 		{
 			ActionResult = "Something went wrong, Try again later";
 		}
-		return RedirectToPage("./List");
+		return RedirectToPage("./ListCategory");
 	}
-
 }

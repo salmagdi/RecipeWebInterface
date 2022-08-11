@@ -1,41 +1,39 @@
 ﻿@page
-@model RecipeRazor.Pages.Recipes.CreateModel
+@model RecipeRazor.Pages.Recipes.CreateRecipeModel
 @{
 	ViewData["Title"] = "Create";
 }
-
 <h2 class="my-4">Add A New Recipe</h2>
 
 <form method="post">
 	<div class="my-3 row">
-		<label asp-for="@Model.NewRecipie.Title" class="col-2 col-form-label"></label>
+		<label asp-for="@Model.recipe.Title" class="col-2 col-form-label"></label>
 		<div class="col-3">
-			<input asp-for="@Model.NewRecipie.Title" class="form-control" />
+			<input asp-for="@Model.Title" class="form-control" />
 		</div>
-		<span asp-validation-for="@Model.NewRecipie.Title" class="text-danger"></span>
+		<span asp-validation-for="@Model.recipe.Title" class="text-danger"></span>
 	</div>
 
 	<div class="my-3 row">
-		<label asp-for=@Model.NewRecipie.Ingredients class="col-form-label col-2 "></label>
+		<label asp-for=@Model.recipe.Ingredients class="col-form-label col-2 "></label>
 		<div class="col-5">
 			<textarea class="form-control" asp-for=@Model.Ingredients rows="5" placeholder="enter every ingredient on a separate line"></textarea>
 		</div>
 	</div>
 
 	<div class="my-3 row">
-		<label asp-for=@Model.NewRecipie.Instructions class="col-form-label col-2 "></label>
+		<label asp-for=@Model.recipe.Instructions class="col-form-label col-2 "></label>
 		<div class="col-5">
 			<textarea class="form-control" asp-for=@Model.Instructions rows="5" placeholder="enter every instruction on a separate line"></textarea>
 		</div>
 	</div>
 
 	<div class="my-3 row">
-		<label asp-for=@Model.NewRecipie.Categories class="col-form-label col-2 "></label>
+		<label asp-for=@Model.recipe.Categories class="col-form-label col-2 "></label>
 		<div class="col-10">
 			@foreach (string category in @Model.Categories)
 			{
-				<input name="ChosenCategories" type="checkbox" value="@category" /> @category
-
+				<input name="SelectedCategories" type="checkbox" value="@category" /> @category
 				<br />
 			}
 		</div>
@@ -44,4 +42,4 @@
 		<input type="submit" value="Create" class="btn btn-primary" />
 		<a class="btn btn-secondary" asp-page="Index">Back to List</a>
 	</div>
-</form>
+</form>>

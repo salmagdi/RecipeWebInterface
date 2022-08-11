@@ -1,5 +1,5 @@
-﻿@page "{recipeId}"
-@model RecipeRazor.Pages.Recipes.EditModel
+﻿@page
+@model RecipeRazor.Pages.Recipes.EditRecipeModel
 @{
 	ViewData["Title"] = "Edit";
 }
@@ -8,15 +8,15 @@
 
 <form method="post">
 	<div class="my-3 row">
-		<label asp-for="@Model.RecipeEdited.Title" class="col-2 col-form-label"></label>
+		<label asp-for="@Model.Recipe.Title" class="col-2 col-form-label"></label>
 		<div class="col-3">
-			<input asp-for="@Model.RecipeEdited.Title" class="form-control"/>
+			<input asp-for="@Model.Recipe.Title" class="form-control"/>
 		</div>
-		<span asp-validation-for="@Model.RecipeEdited.Title" class="text-danger"></span>
+		<span asp-validation-for="@Model.Recipe.Title" class="text-danger"></span>
 	</div>
 
 	<div class="my-3 row">
-		<label asp-for=@Model.RecipeEdited.Ingredients class="col-form-label col-2 "></label>
+		<label asp-for=@Model.Recipe.Ingredients class="col-form-label col-2 "></label>
 		<div class="col-5">
 			<textarea class="form-control" rows="5" placeholder="enter every ingredient on a separate line"
 			asp-for="@Model.Ingredients"></textarea>
@@ -24,7 +24,7 @@
 	</div>
 
 	<div class="my-3 row">
-		<label asp-for=@Model.RecipeEdited.Instructions class="col-form-label col-2 "></label>
+		<label asp-for=@Model.Recipe.Instructions class="col-form-label col-2 "></label>
 		<div class="col-5">
 			<textarea class="form-control" rows="5" placeholder="enter every instruction on a separate line"
 			asp-for="@Model.Instructions"></textarea>
@@ -32,11 +32,11 @@
 	</div>
 
 	<div class="my-3 row">
-		<label asp-for=@Model.RecipeEdited.Categories class="col-form-label col-2 "></label>
+		<label asp-for=@Model.Recipe.Categories class="col-form-label col-2 "></label>
 		<div class="col-10">
 			@foreach (string category in @Model.Categories)
 			{
-				if (Model.RecipeEdited.Categories.Contains(category))
+				if (Model.Recipe.Categories.Contains(category))
 				{
 					<input name="ChosenCategories" type="checkbox" value="@category" checked=""/> @category
 				}

@@ -1,7 +1,6 @@
 ﻿@page
-@model RecipeRazor.Pages.Recipes.IndexModel
-@{
-}
+@model RecipeRazor.Pages.Recipes.ListModel
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @if (@Model.ActionResult != null)
 {
 	<script type="text/javascript">
@@ -19,7 +18,7 @@
 
 <div class="container d-flex justify-content-between align-items-center my-4">
 	<h2>All Recipes</h2>
-	<a class="btn btn-primary h-25" asp-page="Create">Add a Recipe</a>
+	<a class="btn btn-primary h-25" asp-page="CreateRecipe">Add a Recipe</a>
 </div>
 
 <div class="row row-cols-sm-1 row-cols-xl-2 g-4">
@@ -76,10 +75,10 @@
 					</div>
 					<div class="text-center mt-3">
 						<div class="btn-group">
-							<a class="btn btn-primary" asp-page="./Edit" asp-route-recipeId="@recipe.Id">
+							<a class="btn btn-primary" asp-page="./EditRecipe" asp-route-recipeId="@recipe.Id">
 								<i class="bi bi-pencil-square"></i>
 							</a>
-							<a class="btn btn-danger" asp-page="./Delete" asp-route-recipeId="@recipe.Id">
+							<a class="btn btn-danger" asp-page="./DeleteRecipe" asp-route-recipeId="@recipe.Id">
 								<i class="bi bi-trash"></i>
 							</a>
 						</div>
