@@ -1,0 +1,24 @@
+﻿@page "{category}"
+@model RecipeRazor.Pages.Categories.EditModel
+@{
+	ViewData["Title"] = "Edit";
+}
+<style>
+     body{
+       background-image: linear-gradient(to right top, #490b3d, #671d46, #83304e, #9e4655, #b75e5c, #c27262, #cb856b, #d39976, #d3aa87, #d3ba9b, #d5c8b2, #dad6ca);}
+ </style>
+ <div class="modal-header">
+   <h5 class="modal-title" id="addModalLabel">Edit @Model.OldCategory</h5>
+ </div>
+ <form asp-page-handler="update" method="post">
+       <div class="modal-body c-edit-modal-body">
+            <div class="form-group">
+                 <label asp-for="@Model.NewCategory" class="mb-2"> Enter new category name</label>
+                 <input asp-for="@Model.NewCategory" type="text" id="categoryName" class="form-control" value="" required />
+            </div>
+       </div>
+       <div class="modal-footer c-modal-footer">
+          <a class="btn c-cancel-button"asp-page="List">Cancel</a>
+            <button type="submit" class="btn c-confirm-button" asp-page="ListCategory">Confirm</button>
+        </div>
+ </form>>

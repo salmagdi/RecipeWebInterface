@@ -10,7 +10,7 @@ public class ListModel : PageModel
 {
 
 	[TempData]
-public string? ActionResult { get; set; }
+public string? Message { get; set; }
 private readonly IHttpClientFactory _httpClientFactory;
 public ListModel(IHttpClientFactory httpClientFactory) =>
 	_httpClientFactory = httpClientFactory;
@@ -29,7 +29,7 @@ public async Task<IActionResult> OnGet()
 	}
 	catch (Exception)
 	{
-		ActionResult = "something went wrong";
+		Message = "something went wrong";
 	}
 	return RedirectToPage("/Index");
 

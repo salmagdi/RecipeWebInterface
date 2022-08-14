@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RecipeAPI.Model;
 
@@ -25,11 +23,17 @@ app.UseSwaggerUI(options =>
 });
 
 var recipesList = new List<Recipe>();
-var jsonRecipePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-string jsonRecipeFile = Path.Combine(Environment.CurrentDirectory, "Data.json");
-using(StreamReader streamReader = new StreamReader(jsonRecipeFile))
+var categoriesList = new List<string>();
+var jsonPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+string jsonFile = Path.Combine(Environment.CurrentDirectory, "RecipeJson.json");
+
+
+var jsonPathCategory = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+string jsonFileCategory = Path.Combine(Environment.CurrentDirectory, "CategoryJson.json");
+
+using (StreamReader r = new StreamReader(jsonFile))
 {
-	var Data = streamReader.ReadToEnd();
+	var Data = r.ReadToEnd();
 	var Json = JsonConvert.DeserializeObject<List<Recipe>>(Data);
 	if (Json != null)
 	{
@@ -37,47 +41,44 @@ using(StreamReader streamReader = new StreamReader(jsonRecipeFile))
 	}
 }
 
-var categoriesList = new List<string>();
-var jsonCategoryPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-string jsoneCategoryFile = Path.Combine(Environment.CurrentDirectory, "CategoriesInfo.json");
 
-
-
-using (StreamReader streamReader = new StreamReader(jsoneCategoryFile))
+using (StreamReader C = new StreamReader(jsonFileCategory))
 {
-	var Data = streamReader.ReadToEnd();
+	var Data = C.ReadToEnd();
 	var Json = JsonConvert.DeserializeObject<List<string>>(Data);
 	if (Json != null)
 	{
 		categoriesList = Json;
 	}
 }
+
 app.MapGet("/recipes", () =>
 {
+	recipesList = recipesList.OrderBy(o => o.Title).ToList();
 	return Results.Ok(recipesList);
 });
 
 app.MapGet("/recipes/{id}", ([FromRoute(Name = "id")] Guid id) =>
 {
-	var selectedRecipeIndex = recipesList.FindIndex(x => x.Id == id);
-	if (selectedRecipeIndex != -1)
+	for (int i = 0; i < recipesList.Count(); ++i)
 	{
-		return Results.Ok(recipesList[selectedRecipeIndex]);
+		if (recipesList[i].Id == id)
+		{
+			return Results.Ok(recipesList[i]);
+		}
 	}
-	else
-	{
-		return Results.NotFound();
-	}
+	return Results.NotFound();
 });
 
-app.MapPost("/recipes", (Recipe recipe) =>
+app.MapPost("/recipes", ([FromBody] Recipe recipe) =>
 {
 	recipesList.Add(recipe);
+	recipesList = recipesList.OrderBy(o => o.Title).ToList();
 	Save();
 	return Results.Created($"/recipes/{recipe.Id}", recipe);
 });
 
-app.MapDelete("/recipes", (Guid id) =>
+app.MapDelete("/recipes/{id}", ([FromRoute(Name = "id")] Guid id) =>
 {
 	if (recipesList.Find(recipe => recipe.Id == id) is Recipe recipe)
 	{
@@ -85,13 +86,14 @@ app.MapDelete("/recipes", (Guid id) =>
 		Save();
 		return Results.Ok(recipe);
 	}
-	return Results.NotFound(); 
+	return Results.NotFound(); //404 not found
 });
 
 app.MapPut("/recipes/{id}", ([FromBody] Recipe editedRecipe) =>
 {
 	if (recipesList.Find(recipe => recipe.Id == editedRecipe.Id) is Recipe recipe)
 	{
+
 		recipesList.Remove(recipe);
 		recipesList.Add(editedRecipe);
 		recipesList = recipesList.OrderBy(o => o.Title).ToList();
@@ -106,17 +108,12 @@ app.MapGet("/category", () =>
 	return Results.Ok(categoriesList);
 });
 
-app.MapPost("/category", async (Category category) =>
-{
-	if (category.CategoryName == string.Empty || categoriesList.Contains(category.CategoryName))
-	{
-		return Results.BadRequest();
-	}
 
+app.MapPost("/category", ([FromBody] Category category) =>
+{
 	categoriesList.Add(category.CategoryName);
-	categoriesList = categoriesList.OrderBy(o => o).ToList();
 	Save();
-	return Results.Created($"/category/{category}", category);
+	return Results.Created($"/recipes/{category}", category);
 });
 
 app.MapDelete("/category", (string category) =>
@@ -125,9 +122,9 @@ app.MapDelete("/category", (string category) =>
 	{
 		if (categoriesList[i] == category)
 		{
-			foreach (Recipe recipe in recipesList)
+			foreach (Recipe r in recipesList)
 			{
-				recipe.Categories.Remove(category);
+				r.Categories.Remove(category);
 			}
 			categoriesList.Remove(category);
 			Save();
@@ -145,10 +142,10 @@ app.MapPut("/category", (string oldCategory, string editedCategory) =>
 		{
 			categoriesList.Remove(oldCategory);
 			categoriesList.Add(editedCategory);
-			foreach (var recipe in recipesList)
+			foreach (var r in recipesList)
 			{
-				recipe.Categories.Remove(oldCategory);
-				recipe.Categories.Add(editedCategory);
+				r.Categories.Remove(oldCategory);
+				r.Categories.Add(editedCategory);
 			}
 			Save();
 			return Results.NoContent();
@@ -156,15 +153,9 @@ app.MapPut("/category", (string oldCategory, string editedCategory) =>
 	}
 	return Results.NotFound();
 });
-
 void Save()
 {
-	void Save()
-	{
-		File.WriteAllText(jsonRecipeFile, JsonConvert.SerializeObject(recipesList));
-		File.WriteAllText(jsoneCategoryFile, JsonConvert.SerializeObject(categoriesList));
-	}
+	File.WriteAllText(jsonFile, JsonConvert.SerializeObject(recipesList));
+	File.WriteAllText(jsonFileCategory, JsonConvert.SerializeObject(categoriesList));
 }
- 
-
-app.Run();
+app.Run(); //

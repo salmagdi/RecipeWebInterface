@@ -4,52 +4,62 @@
 	ViewData["Title"] = "Edit";
 }
 
-<h2 class="my-4">Edit A Recipe</h2>
+<style>
+     body{
+       background-image: linear-gradient(to right top, #490b3d, #671d46, #83304e, #9e4655, #b75e5c, #c27262, #cb856b, #d39976, #d3aa87, #d3ba9b, #d5c8b2, #dad6ca);}
+ </style>
 
-<form method="post">
-	<div class="my-3 row">
-		<label asp-for="@Model.Recipe.Title" class="col-2 col-form-label"></label>
-		<div class="col-3">
-			<input asp-for="@Model.Recipe.Title" class="form-control"/>
-		</div>
-		<span asp-validation-for="@Model.Recipe.Title" class="text-danger"></span>
-	</div>
 
-	<div class="my-3 row">
-		<label asp-for=@Model.Recipe.Ingredients class="col-form-label col-2 "></label>
-		<div class="col-5">
-			<textarea class="form-control" rows="5" placeholder="enter every ingredient on a separate line"
-			asp-for="@Model.Ingredients"></textarea>
-		</div>
-	</div>
 
-	<div class="my-3 row">
-		<label asp-for=@Model.Recipe.Instructions class="col-form-label col-2 "></label>
-		<div class="col-5">
-			<textarea class="form-control" rows="5" placeholder="enter every instruction on a separate line"
-			asp-for="@Model.Instructions"></textarea>
-		</div>
-	</div>
 
-	<div class="my-3 row">
-		<label asp-for=@Model.Recipe.Categories class="col-form-label col-2 "></label>
-		<div class="col-10">
-			@foreach (string category in @Model.Categories)
-			{
-				if (Model.Recipe.Categories.Contains(category))
-				{
-					<input name="ChosenCategories" type="checkbox" value="@category" checked=""/> @category
-				}
-				else
-				{
-					<input name="ChosenCategories" type="checkbox" value="@category"/> @category
-				}
-				<br />
-			}
-		</div>
-	</div>
-	<div class="btn-group float-end">
-		<input type="submit" value="Edit" class="btn btn-primary" />
-		<a class="btn btn-secondary" asp-page="Index">Back to List</a>
-	</div>
-</form>
+ <div class="modal-header">
+   <h5 class="modal-title" id="addModalLabel">Edit Recipe</h5>
+ </div>
+ <form asp-page-handler="add" method="post">
+       <div class="modal-body c-edit-modal-body">
+            <div class="form-group">
+                <label asp-for="@Model.recipe.Title" class="mb-2"></label>
+				<div class="col-3">
+					<input asp-for="@Model.recipe.Title" class="form-control" />
+				</div>
+				<span asp-validation-for="@Model.recipe.Title" class="text-danger"></span>
+            </div>
+
+			<div class="form-group">
+                <label asp-for=@Model.recipe.Ingredients class="mb-2"></label>
+				<div class="col-5">
+					<textarea class="form-control" asp-for=@Model.Ingredients rows="5" placeholder="enter every ingredient on a separate line"></textarea>
+				</div>
+            </div>
+
+			<div class="form-group">
+                <label asp-for=@Model.recipe.Instructions class="mb-2"></label>
+				<div class="col-5">
+					<textarea class="form-control" asp-for=@Model.Instructions rows="5" placeholder="enter every instruction on a separate line"></textarea>
+				</div>
+            </div>
+
+			<div class="form-group">
+                <label asp-for=@Model.recipe.Categories class="col-form-label col-2 "></label>
+				<div class="col-10">
+					@foreach (string category in @Model.Categories)
+					{
+						if (Model.recipe.Categories.Contains(category))
+						{
+							<input name="SelectedCategories" type="checkbox" value="@category" checked=""/> @category
+						}
+						else
+						{
+							<input name="SelectedCategories" type="checkbox" value="@category"/> @category
+						}
+						<br />
+					}
+				</div>
+            </div>
+       </div>
+
+       <div class="modal-footer c-modal-footer">
+		    <a class="btn c-cancel-button" href="./ListRecipe">Cancel</a>
+            <button type="submit" class="btn c-confirm-button" asp-page="Index">Confirm</button>
+        </div>
+ </form>>

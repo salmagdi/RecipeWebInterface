@@ -1,16 +1,15 @@
-﻿@page "{recipeId}"
-@model RecipeRazor.Pages.Recipes.DeleteRecipeModel
+﻿@page "{category}"
+@model RecipeRazor.Pages.Categories.DeleteModel
 @{
+	ViewData["Title"] = "Delete";
 }
-
-
 <style>
      body{
         background-image: linear-gradient(to right top, #490b3d, #671d46, #83304e, #9e4655, #b75e5c, #c27262, #cb856b, #d39976, #d3aa87, #d3ba9b, #d5c8b2, #dad6ca);
      } 
  </style>
-
-<div class="modal-header c-delete-modal-header"></div>               
+<
+      <div class="modal-header c-delete-modal-header"></div>               
 <form asp-page-handler="delete" method="post" class="deleteForm">
     <div class="modal-body row justify-content-center pt-0">
          <svg xmlns="http://www.w3.org/2000/svg" width="65" height="70" fill="#490b3d" class="bi bi-trash3-fill c-delete-trash" viewBox="0 0 16 16">
@@ -18,13 +17,14 @@
          </svg>
          <h2 class="ps-5 c-delete-modal-title">Delete?</h2>
            <p class="c-delete-confirmation-text">
-               Are you sure you want to delete <b>@Model.recipe.Title</b> recipe?
+               Are you sure you want to delete <b>@Model.DeletedCategory</b> category?
            </p>
    </div>
-   <input type="hidden" asp-for="@Model.recipe" value="@Model.recipe">
+   <input type="hidden" asp-for="@Model.DeletedCategory" value="@Model.DeletedCategory">
     <div class="modal-footer c-modal-footer container row justify-content-center">
-          <a class="btn c-cancel-button" href="./ListRecipe">Cancel</a>
-          <button type="submit" class="btn c-delete-button col-3 ms-3" asp-page="Index">Delete</button>
+          <a class="btn c-cancel-button" asp-page="List">Cancel</a>
+          <button type="submit" class="btn c-delete-button col-3 ms-3" asp-page="ListCategory">Delete</button>
    </div>
  </form>
  
+

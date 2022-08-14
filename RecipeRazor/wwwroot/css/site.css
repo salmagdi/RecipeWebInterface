@@ -16,6 +16,7 @@ html {
 body {
    
 }
+
 .c-header {
     position: sticky;
 }
@@ -43,17 +44,16 @@ body {
     color:lightpink;
 }
 
-}
-.c-categories-page {
-    background-color: whitesmoke;
-    height: 100%;
-    min-height: 100vh;
-    padding: 0px;
-    padding-bottom: 1vh;
+.recipe-ing-ins {
+    color:#7f2e4d;
 }
 
+
+.category-show{
+    background-color:#7f2e4d;
+}
 .c-category-row {
-    background-color: #D48166;
+    background-color: #cabfac;
     min-height: 10%;
     border-radius: 15px;
     filter: drop-shadow(3px 3px 4px grey);
@@ -61,8 +61,17 @@ body {
     align-items: center;
     transition: transform 1s;
 }
+.c-button-row {
+    display: flex;
+    align-items:center;
+    align-content:center;
+    padding-left:60px;
+}
+.recipe-title {
+    color: #7f2e4d;
+}
 
-.c-category-row:hover {
+    .c-category-row:hover {
     transform: translateY(-10px)
 }
 
@@ -71,6 +80,7 @@ body {
     margin-left: 3%;
     flex-grow: 8;
     color:black;
+    font-weight:500;
 }
    
 }
@@ -83,8 +93,15 @@ body {
     margin-right: 5%;
     margin-left: 4%;
     cursor: pointer;
+    color:black;
 }
 
+.c-category-edit-div {
+    margin-right: 5%;
+    margin-left: 4%;
+    cursor: pointer;
+    color: black;
+}
 .c-category-remove-div:hover {
     cursor: pointer;
     color: lightpink;
@@ -93,6 +110,29 @@ body {
 .c-category-edit-div:hover {
     cursor: pointer;
     color: lightpink;
+}
+.c-category-details-div {
+    margin-right: 5%;
+    margin-left: 4%;
+    cursor: pointer;
+    color: black;
+}
+
+ .c-category-details-div:hover {
+        cursor: pointer;
+        color: lightpink;
+ }
+.c-category-back-div {
+    margin-right: 5%;
+    margin-left: 4%;
+    cursor: pointer;
+    color: black;
+}
+
+.c-category-back-div:hover {
+        cursor: pointer;
+        color: lightpink;
+
 }
 
 .c-categories-container-recipe {
@@ -104,42 +144,42 @@ body {
     background-color:whitesmoke;
     height: 100%;
     padding: 0px;
+    color:#3d0633
 }
 
-.c-confirm-button {
+.c-cancel-button {
+    background-color: none;
     border-radius: 40px;
-    color: white;
-    background-color: #D48166;
+    border-color: #490B3D;
 }
 
 .c-categories-container-recipe {
     text-align: start;
     font-size: 15px;
 }
-
+.c-confirm-button {
+    border-radius: 40px;
+    color: white;
+    background-color: #490B3D;
+}
 .c-category-btn {
     border-radius: 25px;
     font-weight: 800
 }
 
-.c-cancel-button {
-    background-color: none;
-    border-radius: 40px;
-    border-color: #D48166;
-}
 
 .c-Add-button {
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
-    border-radius: 40px;
-    border-color: #D48166;
     font-weight: 500;
     color:black;
     text-decoration:none;
+   
 }
 
 .c-Add-button:hover {
         color: #D48166;
+        transition-delay: 1s;
     }
 
 .c-card-div {
@@ -197,37 +237,47 @@ c-delete-modal-title-recipe {
 
 .c-delete-modal-header {
     border-bottom: none;
+    text-align:center;
 }
+.tect-area{
 
+}
 .c-delete-confirmation-text {
-    margin-top: 5%
+    margin-top: 5%;
+    text-align:center;
 }
 
 .c-delete-modal-title {
-    padding-left: 8rem !important;
+   
     margin-top: 5px;
+    text-align:center;
 }
 
 .c-delete-trash {
     border-radius: 50%;
-    border-color: #D48166;
+    border-color: #490b3d;
     border-style: solid;
     width: 70px;
+    text-align:center
 }
 
 .c-delete-modal-content {
     width: 75%;
 }
 
+.modal-body{
+    background-color:none:
+}
+
 .c-cancel-delete {
-    border-color: #D48166;
+    border-color: #490b3d;
     padding: 0.4rem 1rem;
 }
 
 .c-delete-button {
     border-radius: 40px;
     color: white;
-    background-color: #D48166;
+    background-color: #490b3d;
 }
 
 .c-form-check-input:checked {

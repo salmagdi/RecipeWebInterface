@@ -8,7 +8,7 @@ namespace RecipeRazor.Pages.Recipes;
     public class CreateRecipeModel : PageModel
     {
 		[TempData]
-		public string? ActionResult { get; set; }
+		public string? Message { get; set; }
 		[BindProperty, Required]
 		public string Title { get; set; }
 		[BindProperty, Required]
@@ -37,7 +37,7 @@ namespace RecipeRazor.Pages.Recipes;
 			}
 			catch (Exception)
 			{
-				ActionResult = "Something went wrong, please try again";
+				Message = "Something went wrong, please try again";
 				return RedirectToPage("/Index");
 			}
 		}
@@ -54,7 +54,7 @@ namespace RecipeRazor.Pages.Recipes;
 			}
 			catch (Exception)
 			{
-				ActionResult = "Something went wrong, please try again";
+				Message = "Something went wrong, please try again";
 				return RedirectToPage("/Index");
 			}
 
@@ -86,11 +86,11 @@ namespace RecipeRazor.Pages.Recipes;
 					  }
 					 , new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 				response.EnsureSuccessStatusCode();
-				ActionResult = "Created successfully";
+				Message = "Created successfully";
 			}
 			catch (Exception)
 			{
-				ActionResult = "Something went wrong, please try again";
+				Message = "Something went wrong, please try again";
 			}
 			return RedirectToPage("./ListRecipe");
 		}

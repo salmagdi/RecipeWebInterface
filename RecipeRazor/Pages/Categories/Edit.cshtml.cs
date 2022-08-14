@@ -5,13 +5,13 @@ using RecipeRazor.Models;
 
 namespace RecipeRazor.Pages.Categories;
 
-public class EditCategoryModel : PageModel
+public class EditModel : PageModel
 {
 
 	[TempData]
-	public string? ActionResult { get; set; }
+	public string? Message { get; set; }
 	[FromRoute(Name = "category")]
-	[Display(Name = "Old Category Name")]
+	[Display(Name = "Old AddedCategory Name")]
 	public string OldCategory { get; set; } = string.Empty;
 	[BindProperty]
 	[Required]
@@ -19,7 +19,7 @@ public class EditCategoryModel : PageModel
 	public string NewCategory { get; set; } = string.Empty;
 	private readonly IHttpClientFactory _httpClientFactory;
 
-	public EditCategoryModel(IHttpClientFactory httpClientFactory) =>
+	public EditModel(IHttpClientFactory httpClientFactory) =>
 			_httpClientFactory = httpClientFactory;
 
 	public void OnGet()
@@ -34,12 +34,12 @@ public class EditCategoryModel : PageModel
 			var httpClient = _httpClientFactory.CreateClient("API");
 			var response = await httpClient.PutAsync($"category?oldCategory={OldCategory}&editedCategory={NewCategory}", null);
 			response.EnsureSuccessStatusCode();
-			ActionResult = "Edited successfully";
+			Message = "Edited successfully";
 		}
 		catch (Exception)
 		{
-			ActionResult = "Something went wrong, Try again later";
+			Message = "Something went wrong, Try again later";
 		}
-		return RedirectToPage("./ListCategory");
+		return RedirectToPage("./List");
 	}
 }

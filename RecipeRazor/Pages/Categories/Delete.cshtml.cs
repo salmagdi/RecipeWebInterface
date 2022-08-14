@@ -1,18 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
+
 
 namespace RecipeRazor.Pages.Categories;
 
-public class DeleteCategoryModel : PageModel
+public class DeleteModel : PageModel
 {
 	[TempData]
 	public string? Message { get; set; }
 	[FromRoute(Name = "category")]
-	public string DeletedCategory { get; set; } = String.Empty;
+	public string DeletedCategory { get; set; } = string.Empty;
 	private readonly IHttpClientFactory _httpClientFactory;
 
-	public DeleteCategoryModel(IHttpClientFactory httpClientFactory) =>
+	public DeleteModel(IHttpClientFactory httpClientFactory) =>
 			_httpClientFactory = httpClientFactory;
 
 	public void OnGet()
@@ -31,8 +31,7 @@ public class DeleteCategoryModel : PageModel
 		{
 			Message = "Something went wrong, Try again later";
 		}
-		return RedirectToPage("./ListCategory");
+		return RedirectToPage("./List");
 	}
 
 }
-
